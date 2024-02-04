@@ -7,64 +7,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Event listener for input fields to perform real-time validation
     form.addEventListener('input', function (event) {
-        // ... (previous validation code)
-        
-    });
-
-    // Event listener for the source select list using onchange
-    var sourceSelect = document.getElementById('source');
-    sourceSelect.onchange = function () {
-        toggleTextField();
-    };
-
-    // Event listener for the submit button
-    form.addEventListener('submit', function (event) {
-        // ... (previous submit code)
-    });
-
-    function toggleTextField() {
-        var textField = document.getElementById('addTextField');
-        var checkbox = document.getElementById('sourceCheckbox');
-
-        // Remove any existing text field
-        if (textField) {
-            textField.remove();
-        }
-
-        // Check if the checkbox is enabled
-        if (sourceSelect.value !== 'default') {
-            // Create a checkbox
-            var checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.name = 'addTextField';
-            checkbox.id = 'sourceCheckbox';
-            checkbox.required = true;
-
-            // Create a label for the checkbox
-            var label = document.createElement('label');
-            label.htmlFor = 'sourceCheckbox';
-            label.appendChild(document.createTextNode('Add Text Field'));
-
-            // Create a text field
-            var textField = document.createElement('input');
-            textField.type = 'text';
-            textField.name = 'textField';
-            textField.id = 'textField';
-            textField.placeholder = 'Enter text';
-            textField.required = true;
-
-            // Append the checkbox, label, and text field to the form
-            form.insertBefore(checkbox, sourceSelect.nextSibling);
-            form.insertBefore(label, checkbox.nextSibling);
-            form.insertBefore(textField, label.nextSibling);
-        }
-    }
-
-    // Disable the submit button initially
-    submitButton.disabled = true;
-
-    // Event listener for input fields to perform real-time validation
-    form.addEventListener('input', function (event) {
         var inputElement = event.target;
         var fieldName = inputElement.id;
         var errorMessageId = 'error' + fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
