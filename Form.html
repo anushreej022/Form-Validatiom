@@ -22,6 +22,10 @@
         .error-message {
             color: red;
         }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 
@@ -71,6 +75,26 @@
                 <input type='checkbox' name="source" value="yelp" id="sourceYelp" required /> Yelp
                 <span class="error-message" id="errorSource"></span>
                 <br><br>
+
+                <label for="commentsCategory">Comments Category*:</label>
+                <select name="commentsCategory" id="commentsCategory" onchange="handleCommentCategoryChange()">
+                    <option value="general">General</option>
+                    <option value="compliment">Compliment</option>
+                    <option value="complaint">Complaint</option>
+                    <option value="suggestion">Suggestion</option>
+                    <option value="other">Other</option>
+                </select>
+                <span class="error-message" id="errorCommentsCategory"></span>
+                <br><br>
+
+                <div id="commentOptions" class="hidden">
+                    <input type="checkbox" id="enableComment" onchange="handleCommentOptionChange()"> Enable Comment
+                    <br><br>
+                    <label for="commentText">Comment Text*:</label>
+                    <input type="text" name="commentText" id="commentText" class="hidden" required />
+                    <span class="error-message" id="errorCommentText"></span>
+                    <br><br>
+                </div>
 
                 <label for="comments">Comments*:</label>
                 <textarea name="text" id="comments" placeholder="Your comments" rows="5" cols="25" required></textarea>

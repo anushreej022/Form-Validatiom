@@ -40,6 +40,9 @@ document.addEventListener('DOMContentLoaded', function () {
             case 'comments':
                 validateInput(inputElement, errorMessageId, [validateRequired, validateLength]);
                 break;
+            case 'commentsCategory':
+                handleCommentCategoryChange();
+                break;
         }
 
         // Enable the submit button if all validations pass
@@ -77,6 +80,78 @@ document.addEventListener('DOMContentLoaded', function () {
         // Disable the submit button after submission
         submitButton.disabled = true;
     });
+
+    // Event listener for the comment category dropdown
+    function handleCommentCategoryChange() {
+        var commentOptions = document.getElementById('commentOptions');
+        var enableCommentCheckbox = document.getElementById('enableComment');
+        var commentTextField = document.getElementById('commentText');
+        var errorCommentsCategory = document.getElementById('errorCommentsCategory');
+
+        // Clear any existing error message
+        errorCommentsCategory.textContent = '';
+
+        // Remove existing checkbox and text field
+        commentOptions.innerHTML = '';
+
+        // Create a new checkbox for each selection
+        var commentCategorySelect = document.getElementById('commentsCategory');
+        var selectedCategory = commentCategorySelect.value;
+
+        var checkboxLabel = document.createElement('label');
+        checkboxLabel.htmlFor = 'enableComment';
+        checkboxLabel.textContent = 'Enable Comment';
+
+        var checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.id = 'enableComment';
+        checkbox.onchange = handleCommentOptionChange;
+
+        commentOptions.appendChild(checkboxLabel);
+        commentOptions.appendChild(checkbox);
+        commentOptions.appendChild(document.createElement('br'));
+
+        commentOptions.appendChild(document.createElement('br'));
+
+        // Create a new label and text field
+        var label = document.createElement('label');
+        label.for = 'commentText';
+        label.textContent = 'Comment Text*:';
+        commentOptions.appendChild(label);
+
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'commentText';
+        input.id = 'commentText';
+        input.classList.add('hidden');
+        input.required = false;
+
+        commentOptions.appendChild(input);
+
+        commentOptions.appendChild(document.createElement('br'));
+
+        // Show the comment options
+        commentOptions.classList.remove('hidden');
+
+        // Reset the checkbox and text field
+        enableCommentCheckbox.checked = false;
+        commentTextField.classList.add('hidden');
+        commentTextField.value = '';
+    }
+
+    function handleCommentOptionChange() {
+        var enableCommentCheckbox = document.getElementById('enableComment');
+        var commentTextField = document.getElementById('commentText');
+
+        // Toggle the visibility and required status of the text field
+        if (enableCommentCheckbox.checked) {
+            commentTextField.classList.remove('hidden');
+            commentTextField.required = true;
+        } else {
+            commentTextField.classList.add('hidden');
+            commentTextField.required = false;
+        }
+    }
 
     function validateInput(input, errorMessageId, validationFunctions) {
         var isValid = true;
