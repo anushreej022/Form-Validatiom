@@ -16,6 +16,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Validate the input based on the field name
         switch (fieldName) {
+            case 'title':
+                validateTitle();
+                break;
             case 'firstName':
                 validateInput(inputElement, errorMessageId, [validateRequired, validateLength, validateAlphanumeric]);
                 break;
@@ -31,11 +34,11 @@ document.addEventListener('DOMContentLoaded', function () {
             case 'zipcode':
                 validateInput(inputElement, errorMessageId, [validateRequired, validateZipcode]);
                 break;
+            case 'source':
+                validateHowDidYouHear();
+                break;
             case 'comments':
                 validateInput(inputElement, errorMessageId, [validateRequired, validateLength]);
-                break;
-            case 'source':
-                toggleTextField();
                 break;
         }
 
@@ -164,6 +167,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 return false;
             }
         }
+
+        // Check if a title is selected
+        var titleInputs = document.querySelectorAll('input[name="title"]');
+        if (!Array.from(titleInputs).some(input => input.checked)) {
+            return false;
+        }
+
+        // Check if a source is selected
+        var sourceInputs = document.querySelectorAll('input[name="source"]');
+        if (!Array.from(sourceInputs).some(input => input.checked)) {
+            return false;
+        }
+
         return true;
     }
 
@@ -182,10 +198,37 @@ document.addEventListener('DOMContentLoaded', function () {
         return Array.from(sourceInputs).map(input => input.value).join(', ');
     }
 
-    function toggleTextField() {
-        var textField = document.getElementById('addTextField');
-        var checkbox = document.getElementById('source');
+    function validateTitle() {
+        var titleInputs = document.querySelectorAll('input[name="title"]');
+        var errorMessageId = 'errorTitle';
 
-        textField.disabled = !checkbox.value || checkbox.value === 'default';
+        // Remove any existing error message
+        removeErrorMessage(errorMessageId);
+
+        // Check if any title option is selected
+        var isSelected = Array.from(titleInputs).some(input => input.checked);
+
+        // Display error message if no title is selected
+        if (!isSelected) {
+            var firstTitleInput = titleInputs[0];
+            showErrorMessage(errorMessageId, firstTitleInput, validateRequired);
+        }
+    }
+
+    function validateHowDidYouHear() {
+        var sourceInputs = document.querySelectorAll('input[name="source"]');
+        var errorMessageId = 'errorSource';
+
+        // Remove any existing error message
+        removeErrorMessage(errorMessageId);
+
+        // Check if any source option is selected
+        var isSelected = Array.from(sourceInputs).some(input => input.checked);
+
+        // Display error message if no source is selected
+        if (!isSelected) {
+            var firstSourceInput = sourceInputs[0];
+            showErrorMessage(errorMessageId, firstSourceInput, validateRequired);
+        }
     }
 });
