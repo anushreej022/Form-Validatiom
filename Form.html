@@ -1,110 +1,204 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <title>Feedback</title>
-    <style>
-        label {
-            float: left;
-            width: 150px;
-        }
+	<title>Feedback</title>
+	<style>
+		label {
+			float: left;
+			width: 150px;
+		}
 
-        #container {
-            width: 700px;
-            margin: auto;
-            background-color: beige;
-        }
 
-        main {
-            padding: 50px;
-        }
+		#container {
+			width: 700px;
+			margin: auto;
+			background-color: beige;
+		}
 
-        .error-message {
-            color: red;
-        }
-    </style>
+		main {
+			padding: 50px;
+		}
+
+		table {
+			border: 2px solid black;
+		}
+
+		#dataTable td, #dataTable th {
+			border: 1px solid #ddd;
+			padding: 9px;
+		}
+
+		#dataTable th {
+			padding-top: 12px;
+			padding-bottom: 12px;
+			text-align: left;
+			background-color: burlywood;
+			color: white;
+		}
+	</style>
 </head>
 
 <body>
-    <div id="container">
-        <main>
-            <h2>Feedback</h2>
-            <h3>Love something? Hate something? Let us know!</h3>
-            Note: Fields marked with an asterisk(*) are mandatory
-            <br><br>
-            <form method="post" novalidate>
-                <label>Title*:</label>
-                <input type="radio" name="title" id="miss" value="miss" required="required" />Miss
-                <input type="radio" name="title" id="mr" value="mr" required="required" />Mr.
-                <input type="radio" name="title" id="mrs" value="mrs" required="required" />Mrs.
-                <span class="error-message" id="errorTitle"></span>
-                <br><br>
+	<div id="container">
 
-                <label for="firstName">First Name*:</label>
-                <input type="text" name="firstName" id="firstName" placeholder="First Name" required />
-                <span class="error-message" id="errorFirstName"></span>
-                <br><br>
+		<main>
+			<h2>Feedback</h2>
+			<h3>Love something? Hate something? Let us know!</h3>
+			Note : Fields marked with an asterisk(*) are mandatory
+			<br><br>
+			<form method="post" id="myForm" novalidate>
+				<label>Title*:</label>
+				<input type="radio" name="title" id="radioTitle" value="Miss" required />Miss
+				<input type="radio" name="title" id="radioTitle" value="Mr" />Mr.
+				<input type="radio" name="title" id="radioTitle" value="Mrs" />Mrs.
+				<br><br>
 
-                <label for="lastName">Last Name*:</label>
-                <input type="text" name="lastName" id="lastName" placeholder="Last Name" required />
-                <span class="error-message" id="errorLastName"></span>
-                <br><br>
+				<div id="error_radioTitle" style="display: none; color:red;">
+					Please select appropriate title!
+					<br><br>
+				</div>
 
-                <label for="emailId">Email Id*:</label>
-                <input type="text" name="emailId" id="emailId" placeholder="yourname@northeastern.edu" required />
-                <span class="error-message" id="errorEmailId"></span>
-                <br><br>
+				<label for="firstName">First Name*:</label>
+				<input type="text" name="firstName" id="firstName" placeholder="First Name" required />
+				<br><br>
 
-                <label for="phoneNumber">Phone Number*:</label>
-                <input type="text" name="phoneNumber" id="phoneNumber" placeholder="xxx-xxx-xxxx" required />
-                <span class="error-message" id="errorPhoneNumber"></span>
-                <br><br>
+				<div id="error_firstName" style="display: none; color:red;">
+					Please Enter valid first name. 
+					<br><br>
+				</div>
 
-                <label for="zipcode">ZipCode*:</label>
-                <input type="text" name="zipcode" id="zipcode" placeholder="xxxxx" required />
-                <span class="error-message" id="errorZipcode"></span>
-                <br><br>
+				<label for="lastName">Last Name*:</label>
+				<input type="text" name="lastName" id="lastName" placeholder="Last Name" required />
+				<br><br>
 
-                <label for="source">How did you hear*:</label>
-                <input type='checkbox' name="source" value="facebook" id="sourceFacebook" required /> Facebook
-                <input type='checkbox' name="source" value="google" id="sourceGoogle" required /> Google
-                <input type='checkbox' name="source" value="yelp" id="sourceYelp" required /> Yelp
-                <span class="error-message" id="errorSource"></span>
-                <br><br>
+				<div id="error_lastName" style="display: none; color:red;">
+					Please Enter valid last name. 
+					<br><br>
+				</div>
 
-                <label for="comments">Comments*:</label>
-                <textarea name="text" id="comments" placeholder="Your comments" rows="5" cols="25" required></textarea>
-                <span class="error-message" id="errorComments"></span>
-                <br><br>
 
-				
-                <input type="Submit" id="submitButton" disabled>
-                <input type="Reset">
-            </form>
-        </main>
-    </div>
+				<label for="emailId">Email Id*:</label>
+				<input type="text" name="emailId" id="emailId" placeholder="yourname@domain.com" />
+				<br><br>
 
-	<!-- Display the result table -->
-	<div id="resultTable" style="display: none;">
-		<h3>Feedback Results</h3>
-		<table border="1">
-			<thead>
-				<tr>
-					<th>Title</th>
-					<th>First Name</th>
-					<th>Last Name</th>
-					<th>Email Id</th>
-					<th>Phone Number</th>
-					<th>ZipCode</th>
-					<th>How did you hear</th>
-					<th>Comments</th>
-				</tr>
-			</thead>
-			<tbody id="resultBody"></tbody>
+				<div id="error_emailId" style="display: none; color:red;">
+					Please Enter valid northeastern email. 
+					<br><br>
+				</div>
+
+
+				<label for="phoneNumber">Phone Number*:</label>
+				<input type="text" name="phoneNumber" id="phoneNumber" placeholder="xxx-xxx-xxxx" />
+				<br><br>
+
+				<div id="error_phoneNumber" style="display: none; color:red;">
+					Please Enter valid phone number. Phone Number entered is wrong.
+					<br><br>
+				</div>
+
+				<label for="streetAddress1">Street Address 1*:</label>
+				<input type="text" name="streetAddress1" id="streetAddress1" placeholder="address" />
+				<br><br>
+
+				<div id="error_streetAddress1" style="display: none; color:red;">
+					Please Enter Street Address. Street Address cannot be blank.
+					<br><br>
+				</div>
+
+				<label for="streetAddress2">Street Address 2:</label>
+				<input type="text" name="streetAddress2" id="streetAddress2" placeholder="address" />
+				<br><br>
+
+				<label for="city">City*:</label>
+				<input type="text" name="city" id="city" placeholder="city" />
+				<br><br>
+
+				<div id="error_city" style="display: none; color:red;">
+					Please Enter City. City cannot be blank.
+					<br><br>
+				</div>
+
+				<label for="state">State*:</label>
+				<input type="text" name="state" id="state" placeholder="state" />
+				<br><br>
+
+				<div id="error_state" style="display: none; color:red;">
+					Please Enter State. State cannot be blank.
+					<br><br>
+				</div>
+
+				<label for="zipcode">ZipCode*:</label>
+				<input type="text" name="zipcode" id="zipcode" placeholder="xxxxxx" />
+				<br><br>
+
+				<div id="error_zipcode" style="display: none; color:red;">
+					Please Enter valid zipcode. Zipcode entered is wrong.
+					<br><br>
+				</div>
+
+				<label for="drinks">Drinks*:</label>
+				<select name="drinks" id="drinks">
+					<option value="" selected>Choose Drink</option>
+					<option value="Iced Tea">Iced Tea</option>
+					<option value="Latte">Latte</option>
+					<option value="Cappuccino">Cappuccino</option>
+				</select>
+				<br><br>
+
+				<div id="error_drinks" style="display: none; color:red;">
+					Please select valid drink. No drink is selected.
+					<br><br>
+				</div>
+
+				<div id="newSpace">
+
+				</div>
+				<br>
+
+
+
+				<label for="source">How did you hear*:</label>
+				<input type='checkbox' name="source" value="facebook" /> Facebook
+				<input type='checkbox' name="source" value="google" /> Google
+				<input type='checkbox' name="source" value="yelp" /> Yelp
+				<br><br>
+
+				<label for="comments">Comments*:</label>
+				<textarea name="text" id="comments" placeholder="Your comments" rows="5" cols="25"></textarea>
+				<br><br>
+				<input type="Submit" value="Submit">
+				<input type="Reset">
+				<br><br>
+			</form>
+		</main>
+
+		<hr>
+
+	</div>
+	<br><br>
+	<hr>
+	<div id="submitTable">
+		<table id="dataTable">
+			<tr>
+				<th>Title</th>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Email ID</th>
+				<th>Phone Number</th>
+				<th>Street Address 1</th>
+				<th>Street Address 2</th>
+				<th>City</th>
+				<th>State</th>
+				<th>Zip Code</th>
+				<th>Drinks</th>
+				<th>Size</th>
+				<th>Customisation</th>
+				<th>How did you hear?</th>
+				<th>Comments</th>
+			</tr>
 		</table>
 	</div>
-</main>
-</div>
 
     <script src="script.js"></script>
 </body>

@@ -1,234 +1,476 @@
-document.addEventListener('DOMContentLoaded', function () {
-    var form = document.querySelector('form');
-    var submitButton = document.getElementById('submitButton');
 
-    // Disable the submit button initially
-    submitButton.disabled = true;
+    var inputForm = document.getElementById("myForm");
 
-    // Event listener for input fields to perform real-time validation
-    form.addEventListener('input', function (event) {
-        var inputElement = event.target;
-        var fieldName = inputElement.id;
-        var errorMessageId = 'error' + fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+    //set default value to dropdown
+    document.getElementById("drinks").selectedIndex = 0;
 
-        // Remove any existing error message
-        removeErrorMessage(errorMessageId);
+    inputForm.addEventListener("submit", formSubmit);
 
-        // Validate the input based on the field name
-        switch (fieldName) {
-            case 'title':
-                validateTitle();
+    //boolean variables to check if fields are valid or not
+    var validFirstName = false;
+    var validLastName = false;
+    var validEmail = false;
+    var validPhone = false;
+    var validZipCode = false;
+    var validTitle = false;
+    var validHear = false;
+    var validComment = false;
+    var validStreetAdd = false;
+    var validState = false;
+    var validCity = false;
+    var validDrink = false;
+    var validCustom = false;
+
+    var allChkBox = document.getElementsByName("title");
+
+    var hear = document.getElementsByName("source");
+
+    var comments = document.getElementById("comments");
+
+    var firstName = document.getElementById("firstName");
+    firstName.addEventListener("input", validateFields);
+
+    var lastName = document.getElementById("lastName");
+    lastName.addEventListener("input", validateFields);
+
+    var email = document.getElementById("emailId");
+    email.addEventListener("input", validateFields);
+
+    var phoneNumber = document.getElementById("phoneNumber");
+    phoneNumber.addEventListener("input", validateFields);
+
+    var state = document.getElementById("state");
+    state.addEventListener("input", validateFields);
+
+    var city = document.getElementById("city");
+    city.addEventListener("input", validateFields);
+
+    var zipCode = document.getElementById("zipcode");
+    zipCode.addEventListener("input", validateFields);
+
+    var drinks = document.getElementById("drinks");
+    drinks.addEventListener("change", createNewElement);
+
+    var newSpace = document.getElementById("newSpace");
+
+    //regex for different fields
+    var regExName = /^[a-zA-Z]+$/;
+    var regExEmail = /([\w\.]+)@northeastern\.edu$/;
+    var regExPhone = /\d{3}-?\d{3}-\d{4}$/;
+    var regExZip = /(^\d{5}$)|(^\d{5}-\d{4}$)/;
+    var regExState = /^[a-zA-Z]+$/;
+    var regExCity = /^[a-zA-Z]+$/;
+
+    //function to validate all fields
+    function validateFields(field) {
+        var value = field.target.value;
+        var fieldType = this.id;
+        var errorFieldName = "error_" + fieldType;
+
+        switch (fieldType) {
+            case "firstName":
+                if (!value.trim().match(regExName)) {
+                    document.getElementById(errorFieldName).style.display = "block";
+                    this.style.border = "2px solid red";
+                    validFirstName = false;
+                }
+                else {
+                    document.getElementById(errorFieldName).style.display = "none";
+                    this.style.border = "";
+                    validFirstName = true;
+                }
                 break;
-            case 'firstName':
-                validateInput(inputElement, errorMessageId, [validateRequired, validateLength, validateAlphanumeric]);
+            case "lastName":
+                if (!value.trim().match(regExName)) {
+                    document.getElementById(errorFieldName).style.display = "block";
+                    this.style.border = "2px solid red";
+                    validLastName = false;
+                }
+                else {
+                    document.getElementById(errorFieldName).style.display = "none";
+                    this.style.border = "";
+                    validLastName = true;
+                }
                 break;
-            case 'lastName':
-                validateInput(inputElement, errorMessageId, [validateRequired, validateLength, validateAlphanumeric]);
+            case "emailId":
+                if (!value.trim().match(regExEmail)) {
+                    document.getElementById(errorFieldName).style.display = "block";
+                    this.style.border = "2px solid red";
+                    validEmail = false;
+                }
+                else {
+                    document.getElementById(errorFieldName).style.display = "none";
+                    this.style.border = "";
+                    validEmail = true;
+                }
                 break;
-            case 'emailId':
-                validateInput(inputElement, errorMessageId, [validateRequired, validateEmail, validateNUEmail]);
+            case "phoneNumber":
+                if (!value.trim().match(regExPhone)) {
+                    document.getElementById(errorFieldName).style.display = "block";
+                    this.style.border = "2px solid red";
+                    validPhone = false;
+                }
+                else {
+                    document.getElementById(errorFieldName).style.display = "none";
+                    this.style.border = "";
+                    validPhone = true;
+                }
                 break;
-            case 'phoneNumber':
-                validateInput(inputElement, errorMessageId, [validateRequired, validatePhoneNumber]);
+            case "zipcode":
+                if (!value.trim().match(regExZip)) {
+                    document.getElementById(errorFieldName).style.display = "block";
+                    this.style.border = "2px solid red";
+                    validZipCode = false;
+                }
+                else {
+                    document.getElementById(errorFieldName).style.display = "none";
+                    this.style.border = "";
+                    validZipCode = true;
+                }
                 break;
-            case 'zipcode':
-                validateInput(inputElement, errorMessageId, [validateRequired, validateZipcode]);
+            case "state":
+                if (!value.trim().match(regExState)) {
+                    document.getElementById(errorFieldName).style.display = "block";
+                    this.style.border = "2px solid red";
+                    validState = false;
+                }
+                else {
+                    document.getElementById(errorFieldName).style.display = "none";
+                    this.style.border = "";
+                    validState = true;
+                }
                 break;
-            case 'source':
-                validateHowDidYouHear();
-                break;
-            case 'comments':
-                validateInput(inputElement, errorMessageId, [validateRequired, validateLength]);
+            case "city":
+                if (!value.trim().match(regExCity)) {
+                    document.getElementById(errorFieldName).style.display = "block";
+                    this.style.border = "2px solid red";
+                    validCity = false;
+                }
+                else {
+                    document.getElementById(errorFieldName).style.display = "none";
+                    this.style.border = "";
+                    validCity = true;
+                }
                 break;
         }
+    }
 
-        // Enable the submit button if all validations pass
-        submitButton.disabled = !isFormValid();
-    });
+    //function to create new element (checkbox & text field)
+    function createNewElement() {
+        var txtForField;
+        var chckElement = document.getElementById('checkbox1');
 
-    // Event listener for the submit button
-    form.addEventListener('submit', function (event) {
-        event.preventDefault();
+        //check if checkbox is already there or not, if not create new checkbox
+        if (chckElement == null) {
 
-        // Create table row with form data
-        var newRow = document.createElement('tr');
-        newRow.innerHTML = `
-            <td>${getSelectedTitle()}</td>
-            <td>${getValue('firstName')}</td>
-            <td>${getValue('lastName')}</td>
-            <td>${getValue('emailId')}</td>
-            <td>${getValue('phoneNumber')}</td>
-            <td>${getValue('zipcode')}</td>
-            <td>${getSelectedSources()}</td>
-            <td>${getValue('comments')}</td>
-        `;
+            var newElement = document.createElement('input');
+            if (drinks.value == "Iced Tea") {
+                txtForField = " Normal ($1.5 extra) ";
+            }
+            else if (drinks.value = "Latte") {
+                txtForField = " Grande ($2 extra) ";
+            }
+            else if (drinks.value = "Cappuccino") {
+                txtForField = " Venti ($2.5 extra) ";
+            }
+            //label for checkbox
+            var txt = document.createElement('label');
+            txt.htmlFor = "checkbox1";
+            txt.id = "newCheck";
+            txt.appendChild(document.createTextNode(txtForField));
+            newSpace.appendChild(txt);
+            newElement.setAttribute('type', 'checkbox');
+            newElement.setAttribute('id', 'checkbox1');
+            newElement.setAttribute('name', 'checkbox1');
+            newElement.setAttribute('value', txtForField);
+            newSpace.appendChild(newElement);
+            //add event listener to check if checkbox is clicked or not, if clicked create new text box or delete existing one
+            newElement.addEventListener("change", checkClick);
+            function checkClick() {
+                if (this.checked) {
+                    var chckTextField = document.getElementById('newField');
+                    //check if text field already exists or not
+                    if (chckTextField == null) {
+                        var newBr = document.createElement('br');
+                        newSpace.appendChild(newBr);
+                        newBr = document.createElement('br');
+                        newSpace.appendChild(newBr);
+                        var newTextField = document.createElement('input');
+                        newTextField.setAttribute('name', 'newField');
+                        newTextField.setAttribute('id', 'newField');
+                        newTextField.setAttribute('placeholder', 'Enter some value');
+                        var chckLbl = document.getElementById('newLbl');
+                        if(chckLbl == null) {
+                            var newLbl = document.createElement('label');
+                            newLbl.htmlFor = 'newField';
+                            newLbl.id = 'newLbl';
+                            newLbl.appendChild(document.createTextNode("Customisations*"))
+                            newSpace.appendChild(newLbl);
+                        }
+                        //append new text field to div
+                        newSpace.appendChild(newTextField);
+                    }
+                }
+                else {
+                    //text field already exists, delete text field from div
+                    var existingTextField = document.getElementById('newField');
+                    var newLbl = document.getElementById('newLbl');
+                    var newBreak = document.querySelectorAll('#newSpace br');
+                    newSpace.removeChild(newBreak[0]);
+                    newSpace.removeChild(newBreak[1]);
+                    newSpace.removeChild(existingTextField);
+                    newSpace.removeChild(newLbl);
+                }
+            }
 
-        // Append the new row to the result table body
-        var resultBody = document.getElementById('resultBody');
-        resultBody.appendChild(newRow);
+            newSpace.appendChild(txt);
+        }
+        //checkbox already present, change text based on selection of drink
+        else {
+            var newChckBox = document.getElementById('checkbox1');
+            var newLbl = document.getElementById('newCheck');
+            if (drinks.value == "Latte") {
+                newLbl.innerHTML = " Grande ($2 extra) ";
+                newChckBox.nodeValue = " Grande ($2 extra) ";
+            }
+            else if (drinks.value == "Cappuccino") {
+                newLbl.innerHTML = " Venti ($2.5 extra) ";
+                newChckBox.nodeValue = " Grande ($2 extra) ";
+            }
+            else if (drinks.value == "Iced Tea") {
+                newLbl.innerHTML = " Normal ($1.5 extra) ";
+                newChckBox.nodeValue = " Grande ($2 extra) ";
+            }
+        }
+    }
 
-        // Show the result table
-        var resultTable = document.getElementById('resultTable');
-        resultTable.style.display = 'table';
 
-        // Clear form fields
-        form.reset();
+    //function for submit form
+    function formSubmit(e) {
+        e.preventDefault();
 
-        // Disable the submit button after submission
-        submitButton.disabled = true;
-    });
+        var fName = document.getElementById("firstName");
+        var lName = document.getElementById("lastName");
+        var em = document.getElementById("emailId");
+        var mob = document.getElementById("phoneNumber");
+        var add1 = document.getElementById("streetAddress1");
+        var add2 = document.getElementById("streetAddress2");
+        var city = document.getElementById("city");
+        var state = document.getElementById("state");
+        var zip = document.getElementById("zipcode");
+        var comment = document.getElementById("comments");
+        var extraSize = "No Size Preference"; //var for checkbox text
+        var extraCustomisation = "No Extra Customisation"; //var for text field extra customisation
 
-    function validateInput(input, errorMessageId, validationFunctions) {
-        var isValid = true;
+        //default values
+        validStreetAdd = false;
+        validTItle = false;
+        validComment = false;
+        validDrink = false;
+        validHear = false;
+        validCustom = false;
 
-        for (var i = 0; i < validationFunctions.length; i++) {
-            if (!validationFunctions[i](input)) {
-                isValid = false;
-                showErrorMessage(errorMessageId, input, validationFunctions[i]);
+        //check if address is blank
+        if(add1.value.trim() == ""){
+            document.getElementById('error_streetAddress1').style.display = "block";
+            validStreetAdd = false;
+        }
+        else {
+            document.getElementById('error_streetAddress1').style.display = "none";
+            validStreetAdd = true;
+        }
+
+        //check if title is selected or not
+        for (var isSelect in allChkBox) {
+            if (allChkBox[isSelect].checked)
+                validTitle = true;
+        }
+        //if title is not selected display error
+        if(validTitle != true) {
+            document.getElementById('error_radioTitle').style.display = "block";
+        }
+
+        else {
+            document.getElementById('error_radioTitle').style.display = "none";
+        }
+
+        if(drinks[0].selected) {
+            document.getElementById('error_drinks').style.display = "block";
+            validDrink = false;
+        }
+
+        else {
+            validDrink = true;
+            document.getElementById('error_drinks').style.display = "none";
+        }
+
+        //check if any checkbox of how did u hear is selected or not
+        for (var isSelect in hear) {
+            if (hear[isSelect].checked) {
+                validHear = true;
                 break;
             }
         }
 
-        // Add a class to mark invalid fields
-        if (!isValid) {
-            input.classList.add('invalid');
-        } else {
-            input.classList.remove('invalid');
-        }
-    }
 
-    function validateRequired(input) {
-        return input.value.trim() !== '';
-    }
+        //if comments text area contains text
+        if(!(comment.value.trim().length < 1))
+            validComment = true;
 
-    function validateLength(input) {
-        var minLength = parseInt(input.getAttribute('data-min-length')) || 0;
-        var maxLength = parseInt(input.getAttribute('data-max-length')) || Infinity;
-        var value = input.value.trim();
-        return value.length >= minLength && value.length <= maxLength;
-    }
-
-    function validateEmail(input) {
-        // Basic email validation
-        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(input.value);
-    }
-
-    function validatePhoneNumber(input) {
-        // Phone number validation without dashes and requiring a length of 10 digits
-        var phoneRegex = /^\d{10}$/;
-        return phoneRegex.test(input.value);
-    }
-
-    function validateZipcode(input) {
-        // Basic zipcode validation (xxxxx)
-        var zipRegex = /^\d{5}$/;
-        return zipRegex.test(input.value);
-    }
-
-    function validateAlphanumeric(input) {
-        var alphanumericRegex = /^[a-zA-Z0-9]*$/;
-        return alphanumericRegex.test(input.value);
-    }
-
-    function validateNUEmail(input) {
-        // Northeastern University email validation
-        var nueRegex = /^[^\s@]+@northeastern\.edu$/;
-        return nueRegex.test(input.value);
-    }
-
-    function showErrorMessage(errorMessageId, input, validationFunction) {
-        // Create a div for the error message
-        var errorMessageDiv = document.getElementById(errorMessageId);
-        if (!errorMessageDiv) {
-            errorMessageDiv = document.createElement('div');
-            errorMessageDiv.className = 'error-message';
-            errorMessageDiv.id = errorMessageId;
-            input.parentNode.insertBefore(errorMessageDiv, input.nextSibling);
-        }
-
-        errorMessageDiv.textContent = validationFunction(input);
-    }
-
-    function removeErrorMessage(errorMessageId) {
-        // Remove any existing error message for the given field
-        var errorMessageDiv = document.getElementById(errorMessageId);
-        if (errorMessageDiv) {
-            errorMessageDiv.remove();
-        }
-    }
-
-    function isFormValid() {
-        // Check if all input fields are valid
-        var inputs = form.querySelectorAll('input, textarea, select');
-        for (var i = 0; i < inputs.length; i++) {
-            var errorMessageId = 'error' + inputs[i].id.charAt(0).toUpperCase() + inputs[i].id.slice(1);
-            if (inputs[i].classList.contains('invalid') || document.getElementById(errorMessageId)) {
-                return false;
+        //check to see if input box is selected or not
+        var extras = document.getElementById("checkbox1");
+        var lblTxt = document.getElementById("newCheck");
+        if(extras != null) {
+            if (extras.checked) {
+                var txtField = document.getElementById('newField');
+                if (txtField.value.trim() == "") {
+                    alert("Enter some customisation or deselect extra customisation!!");
+                    validCustom = false;
+                } else {
+                    extraSize = lblTxt.textContent;
+                    extraCustomisation = txtField.value;
+                    validCustom = true;
+                }
+            } else {
+                validCustom = true;
             }
         }
 
-        // Check if a title is selected
-        var titleInputs = document.querySelectorAll('input[name="title"]');
-        if (!Array.from(titleInputs).some(input => input.checked)) {
-            return false;
+        if (validFirstName && validLastName && validEmail && validPhone && validZipCode && validTitle && validHear
+                && validComment && validStreetAdd && validState && validCity && validDrink && validCustom) {
+            alert("data is saved succesfully");
+
+            var title;
+            var extras = document.getElementById("checkbox1");
+            var lbl = document.getElementById("newCheck");
+            var size;
+            var side;
+            var newField = document.getElementById("newField");
+            var refer = document.getElementsByName("source");
+            var ref = "";
+
+
+            //get radio button title
+            if (allChkBox[0].checked)
+                title = allChkBox[0].value;
+            else if (allChkBox[1].checked)
+                title = allChkBox[1].value;
+            else if (allChkBox[2].checked)
+                title = allChkBox[2].value;
+
+            //get selected drink text
+            var selectedText;
+            if (drinks[1].selected)
+                selectedText = drinks[1].text;
+            else if (drinks[2].selected)
+                selectedText = drinks[2].text;
+            else if (drinks[3].selected)
+                selectedText = drinks[3].text;
+
+            console.log("Drink selected : " + selectedText);
+            console.log(drinks[1].selected);
+            console.log(drinks[2].selected);
+            console.log(drinks[3].selected);
+
+                //get table from html div
+                var dataTable = document.getElementById('dataTable');
+
+                //add form data to table
+                var newTr = document.createElement('tr');
+                var newTd = document.createElement('td');
+                newTd.appendChild(document.createTextNode(title));
+                newTr.appendChild(newTd);
+
+                newTd = document.createElement('td');
+                newTd.appendChild(document.createTextNode(fName.value));
+                newTr.appendChild(newTd);
+
+                newTd = document.createElement('td');
+                newTd.appendChild(document.createTextNode(lName.value));
+                newTr.appendChild(newTd);
+
+                newTd = document.createElement('td');
+                newTd.appendChild(document.createTextNode(em.value));
+                newTr.appendChild(newTd);
+
+                newTd = document.createElement('td');
+                newTd.appendChild(document.createTextNode(mob.value));
+                newTr.appendChild(newTd);
+
+                newTd = document.createElement('td');
+                newTd.appendChild(document.createTextNode(add1.value));
+                newTr.appendChild(newTd);
+
+                newTd = document.createElement('td');
+                newTd.appendChild(document.createTextNode(add2.value));
+                newTr.appendChild(newTd);
+
+                newTd = document.createElement('td');
+                newTd.appendChild(document.createTextNode(city.value));
+                newTr.appendChild(newTd);
+
+                newTd = document.createElement('td');
+                newTd.appendChild(document.createTextNode(state.value));
+                newTr.appendChild(newTd);
+
+                newTd = document.createElement('td');
+                newTd.appendChild(document.createTextNode(zip.value));
+                newTr.appendChild(newTd);
+
+                newTd = document.createElement('td');
+                newTd.appendChild(document.createTextNode(selectedText));
+                newTr.appendChild(newTd);
+
+                newTd = document.createElement('td');
+                newTd.appendChild(document.createTextNode(extraSize));
+                newTr.appendChild(newTd);
+
+                newTd = document.createElement('td');
+                newTd.appendChild(document.createTextNode(extraCustomisation));
+                newTr.appendChild(newTd);
+
+
+                if (refer[0].checked)
+                    ref += " " + refer[0].value;
+                if (refer[1].checked)
+                    ref += " " + refer[1].value;
+                if (refer[2].checked)
+                    ref += " " + refer[2].value;
+
+                newTd = document.createElement('td');
+                newTd.appendChild(document.createTextNode(ref));
+                newTr.appendChild(newTd);
+
+                newTd = document.createElement('td');
+                newTd.appendChild(document.createTextNode(comment.value));
+                newTr.appendChild(newTd);
+
+                dataTable.appendChild(newTr);
+                var newDiv = document.getElementById('submitTable');
+                newDiv.appendChild(dataTable);
+
+                var newDiv = document.getElementById('newSpace');
+                var chck = document.getElementById("checkbox1");
+                var txt = document.getElementById("newField");
+                var remCheck = document.getElementById("newCheck");
+                console.log(remCheck);
+                var newLbl = document.getElementById('newLbl');
+                var newBreak = document.querySelectorAll('#newSpace br');
+                newDiv.removeChild(chck);
+                if(txt != null)
+                    newDiv.removeChild(txt);
+                newDiv.removeChild(remCheck);
+                if(newLbl != null)
+                    newDiv.removeChild(newLbl);
+                if(newBreak.length != 0) {
+                    newDiv.removeChild(newBreak[0]);
+                    newDiv.removeChild(newBreak[1]);
+                }
+                inputForm.reset();
+
         }
-
-        // Check if a source is selected
-        var sourceInputs = document.querySelectorAll('input[name="source"]');
-        if (!Array.from(sourceInputs).some(input => input.checked)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    function getSelectedTitle() {
-        var titleInputs = document.querySelectorAll('input[name="title"]');
-        var selectedTitle = Array.from(titleInputs).find(input => input.checked);
-        return selectedTitle ? selectedTitle.value : '';
-    }
-
-    function getValue(fieldName) {
-        return document.getElementById(fieldName).value.trim();
-    }
-
-    function getSelectedSources() {
-        var sourceInputs = document.querySelectorAll('input[name="source"]:checked');
-        return Array.from(sourceInputs).map(input => input.value).join(', ');
-    }
-
-    function validateTitle() {
-        var titleInputs = document.querySelectorAll('input[name="title"]');
-        var errorMessageId = 'errorTitle';
-
-        // Remove any existing error message
-        removeErrorMessage(errorMessageId);
-
-        // Check if any title option is selected
-        var isSelected = Array.from(titleInputs).some(input => input.checked);
-
-        // Display error message if no title is selected
-        if (!isSelected) {
-            var firstTitleInput = titleInputs[0];
-            showErrorMessage(errorMessageId, firstTitleInput, validateRequired);
+        else {
+            alert("Please enter all the mandatory field");
         }
     }
 
-    function validateHowDidYouHear() {
-        var sourceInputs = document.querySelectorAll('input[name="source"]');
-        var errorMessageId = 'errorSource';
-
-        // Remove any existing error message
-        removeErrorMessage(errorMessageId);
-
-        // Check if any source option is selected
-        var isSelected = Array.from(sourceInputs).some(input => input.checked);
-
-        // Display error message if no source is selected
-        if (!isSelected) {
-            var firstSourceInput = sourceInputs[0];
-            showErrorMessage(errorMessageId, firstSourceInput, validateRequired);
-        }
-    }
-});
