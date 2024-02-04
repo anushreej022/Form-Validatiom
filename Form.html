@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Feedback</title>
+    <style>
+        label {
+            float: left;
+            width: 150px;
+        }
+
+        #container {
+            width: 700px;
+            margin: auto;
+            background-color: beige;
+        }
+
+        main {
+            padding: 50px;
+        }
+
+        .error-message {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <main>
+            <h2>Feedback</h2>
+            <h3>Love something? Hate something? Let us know!</h3>
+            Note: Fields marked with an asterisk(*) are mandatory
+            <br><br>
+            <form method="post" novalidate>
+                <label>Title*:</label>
+                <input type="radio" name="title" id="miss" value="miss" required="required" />Miss
+                <input type="radio" name="title" id="mr" value="mr" required="required" />Mr.
+                <input type="radio" name="title" id="mrs" value="mrs" required="required" />Mrs.
+                <br><br>
+                <label for="firstName">First Name*:</label>
+                <input type="text" name="firstName" id="firstName" placeholder="First Name" />
+                <span class="error-message" id="errorFirstName"></span>
+                <br><br>
+
+                <label for="lastName">Last Name*:</label>
+                <input type="text" name="lastName" id="lastName" placeholder="Last Name" />
+                <span class="error-message" id="errorLastName"></span>
+                <br><br>
+
+                <label for="emailId">Email Id*:</label>
+                <input type="text" name="emailId" id="emailId" placeholder="yourname@northeastern.edu" />
+                <span class="error-message" id="errorEmailId"></span>
+                <br><br>
+
+                <label for="phoneNumber">Phone Number*:</label>
+                <input type="text" name="phoneNumber" id="phoneNumber" placeholder="xxx-xxx-xxxx" />
+                <span class="error-message" id="errorPhoneNumber"></span>
+                <br><br>
+
+                <label for="zipcode">ZipCode*:</label>
+                <input type="text" name="zipcode" id="zipcode" placeholder="xxxxx" />
+                <span class="error-message" id="errorZipcode"></span>
+                <br><br>
+
+                <label for="source">How did you hear*:</label>
+                <select name="source" id="source">
+                    <option value="default">Select One</option>
+                    <option value="facebook">Facebook</option>
+                    <option value="google">Google</option>
+                    <option value="yelp">Yelp</option>
+                    <option value="other">Other</option>
+                </select>
+                <input type='checkbox' name="addTextField" id="addTextField" disabled /> Add Text Field
+                <br><br>
+
+                <label for="comments">Comments*:</label>
+                <textarea name="text" id="comments" placeholder="Your comments" rows="5" cols="25"></textarea>
+                <span class="error-message" id="errorComments"></span>
+                <br><br>
+                <input type="Submit" id="submitButton" disabled>
+                <input type="Reset">
+            </form>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
