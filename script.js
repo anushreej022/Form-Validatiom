@@ -48,6 +48,7 @@
     var zipCode = document.getElementById("zipcode");
     zipCode.addEventListener("input", validateFields);
 
+    //The onChange event is used here
     var drinks = document.getElementById("drinks");
     drinks.addEventListener("change", createNewElement);
 
